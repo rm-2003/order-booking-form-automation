@@ -1,0 +1,16 @@
+{
+  "name": "react-auth-proxy",
+  "version": "1.0.0",
+  "description": "Proxy server for React app authentication",
+  "main": "proxy-server.js",
+  "scripts": {
+    "start": "node proxy-server.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6"
+  }
+} 

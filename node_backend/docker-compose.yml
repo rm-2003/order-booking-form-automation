@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=obf_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - JWT_SECRET=your_jwt_secret_key
+      - SUPABASE_URL=your_supabase_url
+      - SUPABASE_KEY=your_supabase_key
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - obf-network
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=obf_db
+    restart: unless-stopped
+    networks:
+      - obf-network
+
+  # Optional pgAdmin container for database management
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - obf-network
+
+networks:
+  obf-network:
+    driver: bridge
+
+volumes:
+  postgres_data: 
